@@ -57,22 +57,6 @@ reg [1:0]  global_pht	[0:1023];
 reg [1:0]  choice	[0:1023];
 reg [9:0]  ghr;
 
-// === Init value ===
-integer i;
-initial begin
- 	for (i = 0; i < 1024; i = i + 1) begin
-      		btb_valid[i]  = 1'b0;
-            	btb_target[i] = 32'd0;
-            	local_bht[i]  = 6'd0;
-            	global_pht[i] = 2'b00;
-            	choice[i]     = 2'b01;
-        end
-	for (i = 0; i < 64; i = i + 1) begin
-            	local_pht[i] = 2'b00;
-	end
-       	ghr = 10'd0;
-end
-
 // === BTB === 
 // BTB read
 assign btb_target_pc   = btb_target[pc_index];
