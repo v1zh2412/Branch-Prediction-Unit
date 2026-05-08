@@ -16,38 +16,38 @@
 ../rtl/bpu_predictor.v
 ../rtl/bpu_ctrl.v
 
-//// include directories
-//-incdir ../sv
-//-incdir ../../yapp/sv 
-//-incdir ../../channel/sv
-//-incdir  ../../hbus/sv 
-//-incdir ../../clock_and_reset/sv
-//
-//// compile files
-//
-//// YAPP UVC package and interface
-//../../yapp/sv/yapp_pkg.sv
-//../../yapp/sv/yapp_if.sv 
-//
-//// Channel UVC package and interface
-//../../channel/sv/channel_pkg.sv 
-//../../channel/sv/channel_if.sv 
-//
-//// HBUS UVC package and interface
-//../../hbus/sv/hbus_pkg.sv 
-//../../hbus/sv/hbus_if.sv 
-//
-//// clock and reset UVC package
-//../../clock_and_reset/sv/clock_and_reset_pkg.sv 
-//../../clock_and_reset/sv/clock_and_reset_if.sv 
-//
-//// router DUT
-//../../router_rtl/yapp_router.sv 
-//
-//// clock generator module
-//clkgen.sv
-//// top module for UVM test environment
-//tb_top.sv
-//// accelerated top module for interface instance
-//hw_top.sv
-//
+// include directories
+-incdir ../sv
+-incdir ../../yapp/sv 
+-incdir ../../channel/sv
+-incdir  ../../hbus/sv 
+-incdir ../../clock_and_reset/sv
+
+// compile files
+
+// YAPP UVC package and interface
+../../yapp/sv/yapp_pkg.sv
+../../yapp/sv/yapp_if.sv 
+
+// Channel UVC package and interface
+../../channel/sv/channel_pkg.sv 
+../../channel/sv/channel_if.sv 
+
+// HBUS UVC package and interface
+../../hbus/sv/hbus_pkg.sv 
+../../hbus/sv/hbus_if.sv 
+
+// clock and reset UVC package
+../../clock_and_reset/sv/clock_and_reset_pkg.sv 
+../../clock_and_reset/sv/clock_and_reset_if.sv 
+
+// router DUT
+../../router_rtl/yapp_router.sv 
+
+// clock generator module
+clkgen.sv
+// top module for UVM test environment
+tb_top.sv
+// accelerated top module for interface instance
+hw_top.sv
+
