@@ -7,7 +7,8 @@
 `timescale 1ns / 1ps
 
 module bpu_top(
-	 input		clk
+	 input			clk
+	,input			rst_n
 	,input         	halt
    	,input	[6:0]  	fetch_opcode
    	,input  [31:0] 	branch_target_fetch
@@ -58,6 +59,7 @@ wire            predict_taken_pc	,predict_taken_nxpc;
 //  Register File
 bpu_reg u_bpu_reg(
  	 .clk		    	    (clk			        )
+	,.rst_n					(rst_n					)
 	,.halt		    	    (halt			        ) 
 	,.pc		    	    (pc			            )
 	,.nxpc		    	    (nxpc			        )

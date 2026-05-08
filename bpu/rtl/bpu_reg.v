@@ -8,7 +8,8 @@
 
 module bpu_reg(
     	 input         	clk                       
-    	,input         	halt                      
+    	,input			rst_n	
+		,input         	halt                      
     	,input 	[31:0] 	pc                       
     	,input	[31:0] 	nxpc                      
     	// BTB 	
@@ -54,7 +55,7 @@ reg [31:0] btb_target	[0:1023];
 reg [5:0]  local_bht	[0:1023];
 reg [1:0]  local_pht	[0:63];
 reg [1:0]  global_pht	[0:1023];
-reg [1:0]  choice	[0:1023];
+reg [1:0]  choice		[0:1023];
 reg [9:0]  ghr;
 
 // === BTB === 
@@ -65,8 +66,16 @@ assign btb_target_nxpc = btb_target[nxpc_index];
 assign btb_valid_pc   = btb_valid[pc_index];
 assign btb_valid_nxpc = btb_valid[nxpc_index];
 
+integer i;
+
 // BTB write
-always @(posedge clk) begin
+always @(posedge clk or negedge rst_n) begin
+	if(!rst_n) begin
+		for (i=0; i< 1024; i = i+1) begin
+			btb_valid[i]  <= 0;
+			btb_target[i] <= 0;
+		end
+	end else
 	if(btb_wr_en && !halt) begin
 		btb_target[pc_index] <= btb_wr_target;
 		btb_valid[pc_index]  <= 1'b1;  
@@ -83,7 +92,12 @@ assign local_bht_data_pc   = local_bht[pc_index];
 assign local_bht_data_nxpc = local_bht[nxpc_index];
 
 // Write
-always @(posedge clk) begin
+always @(posedge clk or negedge rst_n) begin
+	if(!rst_n) begin
+		for (i=0; i< 1024; i = i+1) begin
+			local_bht[i] <= 0;
+		end
+	end else
 	if(local_bht_wr_en && !halt) begin
 		local_bht[pc_index] <= local_bht_wr_data;
 	end else begin
@@ -101,7 +115,12 @@ assign local_pht_data_pc   = local_pht[local_pht_index_pc];
 assign local_pht_data_nxpc = local_pht[local_pht_index_nxpc];
 
 // Write
-always @(posedge clk) begin
+always @(posedge clk or negedge rst_n) begin
+	if(!rst_n) begin
+		for (i=0; i< 64; i = i+1) begin
+			local_pht[i] <= 0;
+		end
+	end else
 	if(local_pht_wr_en && !halt) begin
 		local_pht[local_pht_index_pc] <= local_bht_wr_data;
 	end else begin
@@ -118,7 +137,12 @@ assign global_pht_data_pc   = global_pht[global_pc_index];
 assign global_pht_data_nxpc = global_pht[global_nxpc_index];
 
 // Write
-always @(posedge clk) begin
+always @(posedge clk or negedge rst_n) begin
+	if(!rst_n) begin
+		for (i=0; i< 1024; i = i+1) begin
+			global_pht[i] <= 0;
+		end
+	end else
 	if(global_pht_wr_en && !halt) begin
 		global_pht[global_pc_index] <= global_pht_wr_data;
 	end else begin
@@ -132,7 +156,12 @@ assign choice_data_pc   = choice[pc_index];
 assign choice_data_nxpc = choice[nxpc_index];
 
 // Write
-always @(posedge clk) begin
+always @(posedge clk or negedge rst_n) begin
+	if(!rst_n) begin
+		for (i=0; i< 1024; i = i+1) begin
+			choice[i] <= 2'b01;
+		end
+	end
 	if(choice_wr_en && !halt) begin
 		choice[pc_index] <= choice_wr_data;
 	end else begin
@@ -145,7 +174,10 @@ end
 assign ghr_out = ghr;
 
 // Write
-always @(posedge clk) begin
+always @(posedge clk or negedge rst_n) begin
+	if(!rst_n) begin
+		ghr <= 10'd0;
+	end
 	if(ghr_wr_en && !halt) begin
 		ghr <= ghr_wr_data;
 	end else begin
