@@ -87,7 +87,7 @@ assign global_pht_wr_data = btb_valid_pc	? update_counter(global_pht_data_pc, br
 											  WT;
 
 // Choice
-wire   disagree       = (local_pht_data_pc != global_pht_data_pc);
+wire   disagree       = (local_pht_data_pc[1]  != global_pht_data_pc[1]);
 wire   local_correct  = (local_pht_data_pc[1]  == branch_taken);
 wire   global_correct = (global_pht_data_pc[1] == branch_taken);
 

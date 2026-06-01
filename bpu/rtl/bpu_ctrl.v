@@ -32,7 +32,7 @@ module bpu_ctrl(
 
 // pre-compute
 wire fetch_is_branch = (fetch_opcode == 7'b1100011);
-wire fetch_ready     = ((flush_in && 1'b0) || (flush_in && 1'b1));
+wire fetch_ready     = ((flush_in == 2'd0) || (flush_in == 2'd1));
 
 // flush
 assign bpu_flush 	 = 	(!is_branch)		? 2'b0							:
@@ -45,15 +45,15 @@ wire [31:0]	spec_nxpc2;
 wire 		spec_valid;
 wire s1, s2, s3;
 
-assign s1 = (fetch_is_branch && !btb_target_nxpc 	&& fetch_ready);
-assign s2 = (fetch_is_branch && !predict_taken_nxpc && fetch_ready);
+assign s1 = (fetch_is_branch && !btb_valid_nxpc 	&& fetch_ready);
+assign s2 = (fetch_is_branch && predict_taken_nxpc  && fetch_ready);
 assign s3 = (fetch_is_branch && !predict_taken_nxpc && btb_valid_pc	&& fetch_ready);
 
 assign spec_valid = (s1 || s2 || s3);
 assign spec_nxpc2 = s1 	? (nxpc + branch_target_fetch)	:
 				   	s2	? btb_target_nxpc				:
 		 			s3	? (pc + 4)						:
-	  					  spec_nxpc2					;
+	  					  32'b0							;
 
 // Correction
 wire [31:0] corr_nxpc2;
@@ -68,7 +68,7 @@ assign corr_valid = (c1 || c2 || c3);
 assign corr_nxpc2 =	c1	? (nxpc + 4)	:
 					c2	? btb_target_pc	:
 		  			c3	? (nxpc + 4)	:
-						  corr_nxpc2	;
+						  32'b0			;
 
 // Output MUX
 assign bpu_nxpc2_valid = (spec_valid || corr_valid)		;

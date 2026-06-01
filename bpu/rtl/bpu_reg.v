@@ -107,8 +107,8 @@ end
 
 
 // === Local PHT === 
-wire local_pht_index_pc   = local_bht[pc_index];
-wire local_pht_index_nxpc = local_bht[nxpc_index];
+wire [5:0] local_pht_index_pc   = local_bht[pc_index];
+wire [5:0] local_pht_index_nxpc = local_bht[nxpc_index];
 
 // Read
 assign local_pht_data_pc   = local_pht[local_pht_index_pc];
@@ -122,15 +122,15 @@ always @(posedge clk or negedge rst_n) begin
 		end
 	end else
 	if(local_pht_wr_en && !halt) begin
-		local_pht[local_pht_index_pc] <= local_bht_wr_data;
+		local_pht[local_pht_index_pc] <= local_pht_wr_data;
 	end else begin
 		local_pht[local_pht_index_pc] <= local_pht[local_pht_index_pc];	
 	end
 end
 
 // === Global PHT === 
-wire global_pc_index   = pc_index   ^ ghr;
-wire global_nxpc_index = nxpc_index ^ ghr;
+wire [9:0] global_pc_index   = pc_index   ^ ghr;
+wire [9:0] global_nxpc_index = nxpc_index ^ ghr;
 
 // Read
 assign global_pht_data_pc   = global_pht[global_pc_index];
@@ -161,7 +161,7 @@ always @(posedge clk or negedge rst_n) begin
 		for (i=0; i< 1024; i = i+1) begin
 			choice[i] <= 2'b01;
 		end
-	end
+	end else
 	if(choice_wr_en && !halt) begin
 		choice[pc_index] <= choice_wr_data;
 	end else begin
@@ -177,7 +177,7 @@ assign ghr_out = ghr;
 always @(posedge clk or negedge rst_n) begin
 	if(!rst_n) begin
 		ghr <= 10'd0;
-	end
+	end else
 	if(ghr_wr_en && !halt) begin
 		ghr <= ghr_wr_data;
 	end else begin
